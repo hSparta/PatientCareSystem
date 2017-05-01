@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PatientCareSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clinics">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Clinic" Type="varchar" MaxLength="150" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="GENDER" />
+          </Key>
+          <Property Name="GENDER" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="NAME" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AGE" Type="int" Nullable="false" />
+          <Property Name="ADDRESS" Type="char" MaxLength="25" />
+          <Property Name="GENDER" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="REGISTERED_AT_CLINIC" Type="int" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Patients_Clinics">
+          <End Role="Clinics" Type="Self.Clinics" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clinics">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="REGISTERED_AT_CLINIC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patients_Gender">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="GENDER" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="GENDER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PatientCareSystemModelStoreContainer">
+          <EntitySet Name="Clinics" EntityType="Self.Clinics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Patients_Clinics" Association="Self.FK_Patients_Clinics">
+            <End Role="Clinics" EntitySet="Clinics" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patients_Gender" Association="Self.FK_Patients_Gender">
+            <End Role="Gender" EntitySet="Gender" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PatientCareSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clinic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Clinic1" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_Patients_Clinics" FromRole="Clinics" ToRole="Patients" />
+        </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="GENDER1" />
+          </Key>
+          <Property Name="GENDER1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_Patients_Gender" FromRole="Gender" ToRole="Patients" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AGE" Type="Int32" Nullable="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+          <Property Name="GENDER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="REGISTERED_AT_CLINIC" Type="Int32" />
+          <NavigationProperty Name="Clinic" Relationship="Self.FK_Patients_Clinics" FromRole="Patients" ToRole="Clinics" />
+          <NavigationProperty Name="Gender1" Relationship="Self.FK_Patients_Gender" FromRole="Patients" ToRole="Gender" />
+        </EntityType>
+        <Association Name="FK_Patients_Clinics">
+          <End Role="Clinics" Type="Self.Clinic" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clinics">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="REGISTERED_AT_CLINIC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patients_Gender">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
+          <End Role="Patients" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="GENDER1" />
+            </Principal>
+            <Dependent Role="Patients">
+              <PropertyRef Name="GENDER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PatientCareSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clinics" EntityType="Self.Clinic" />
+          <EntitySet Name="Genders" EntityType="Self.Gender" />
+          <EntitySet Name="Patients" EntityType="Self.Patient" />
+          <AssociationSet Name="FK_Patients_Clinics" Association="Self.FK_Patients_Clinics">
+            <End Role="Clinics" EntitySet="Clinics" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patients_Gender" Association="Self.FK_Patients_Gender">
+            <End Role="Gender" EntitySet="Genders" />
+            <End Role="Patients" EntitySet="Patients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PatientCareSystemModelStoreContainer" CdmEntityContainer="PatientCareSystemEntities">
+          <EntitySetMapping Name="Clinics">
+            <EntityTypeMapping TypeName="PatientCareSystemModel.Clinic">
+              <MappingFragment StoreEntitySet="Clinics">
+                <ScalarProperty Name="Clinic1" ColumnName="Clinic" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genders">
+            <EntityTypeMapping TypeName="PatientCareSystemModel.Gender">
+              <MappingFragment StoreEntitySet="Gender">
+                <ScalarProperty Name="GENDER1" ColumnName="GENDER" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="PatientCareSystemModel.Patient">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="AGE" ColumnName="AGE" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+                <ScalarProperty Name="REGISTERED_AT_CLINIC" ColumnName="REGISTERED_AT_CLINIC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
